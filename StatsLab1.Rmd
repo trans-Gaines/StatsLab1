@@ -1,0 +1,96 @@
+---
+title: "StatsLab1"
+author: "trans-Gaines"
+date: "9/12/2021"
+output: html_document
+---
+
+Assignments for Stats
+
+**1. Compute the sum of the sequence 100 to 1000, going up by a constant value of 100 (100,200,300,400,500,600,700,800,900,1000).**
+
+First we must utilize the seq function to "step" by 100 within this range
+
+```{r}
+seq(100, 1000, 100)
+```
+Then we sum this sequence to arrive at the answer
+```{r}
+sum(seq(100, 1000, 100))
+```
+
+
+**2. Compute the sum of these numbers (1,3,2,4,3,5,4,3,4,5,6,5,6,7,6,5,6,5,4,3,4,5)**
+We utilize a simple "sum" function for the set of numbers to arrive at the answer
+```{r}
+sum(1,3,2,4,3,5,4,3,4,5,6,5,6,7,6,5,6,5,4,3,4,5)
+```
+
+**3. Write a custom sequence generator function using a for loop that generates a sequence from a starting integer value to an ending integer value in steps of 1.**
+
+First we design our for loop so that it creates a single vector, starting at number "A", up to number, "Q", in steps of 1 (we do not have to specify steps of 1 because i specifies integers)
+```
+x <-c()
+for(i in A : Q ){x[i] <- i}
+x
+```
+
+**3a. Demonstrate that it can produce the sequence 1 to 10.**
+We use this code to produce a sequence from 1( a=1)  to 10 (Q=10)
+```{r}
+x <-c()
+for(i in 1:10){x[i] <- i}
+x
+```
+
+**4.Write a custom function to implement the following general equation to find the sum of any constant series:
+𝑋1+𝑋2+…+𝑋𝑛=(𝑋𝑛−𝑋1𝑐+1)(𝑋1+𝑋𝑛2)**
+We first utilize our knowledge of sum(seq) from 1-3 to create a function
+```
+GaussianAddition <- function(input1,input2, SizeofStep){return(sum(seq(input1, input2, SizeofStep)))
+```
+
+**4a.Demonstrate that your function correctly produces the sum for the series below:
+seq(10,100,10)**
+#>  [1]  10  20  30  40  50  60  70  80  90 100
+We then utilize this function for the described series
+```{r}
+GaussianAddition <- function(input1,input2, SizeofStep){return(sum(seq(input1, input2, SizeofStep)))}
+GaussianAddition (10,100,10)
+```
+
+
+**5. Write a custom function that generates a constant series between any start and end values, with any constant, and finds the sum. Have your function output both the sequence and the sum. For this problem, feel free to use the existing seq() and sum() functions in your custom function.**
+
+First we write out a function with output which lists both sequence and sum
+
+```
+GaussianAdditionSequenceandSum <- function (startofsequence, endofsequence, sizeofstep){
+  sequence<- seq(startofsequence, endofsequence, sizeofstep)
+  sum<- sum(sequence)
+  my_output <- list(sequence, sum)
+  return(my_output)}
+```
+**Demonstrate the function correctly prints out the above sequence (10 to 100 in steps of 10), and its sum.**
+
+Then we demonstrate utilizing this function for our specified sequence
+
+```{r}
+seq(10, 100, 10)
+sum(seq(10,100,10))
+GaussianAdditionSequenceandSum <- function (startofsequence, endofsequence, sizeofstep){
+  sequence<- seq(startofsequence, endofsequence, sizeofstep)
+  sum<- sum(sequence)
+  my_output <- list(sequence, sum)
+  return(my_output)}
+```
+
+**6. Use the sum() and the length() functions to calculate the mean (average) of the numbers x = c(1,2,3,4,5).**
+
+To undertake this, we define a mean/average in terms of the operators we are learning: the mean is the sum(vector)/length(vector)
+
+```{r}
+Seekingaverage <- c(1,2,3,4,5)
+sum(Seekingaverage)/length(Seekingaverage)
+````
+
