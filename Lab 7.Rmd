@@ -1,0 +1,72 @@
+---
+title: "Lab 7"
+output: html_document
+---
+**1. A test-taker answered 50 true/false questions and received a score of 60% correct. Report the results of a binomial test and explain whether you think the test-score could be produced by the test-taker randomly guessing on each question. (2 points)**
+
+When we say "random guessing" we treat the question as a .5 chance of getting either answer (p = .5)
+
+```{r}
+binom.test(x = 30, n =  50, p = .5)
+```
+We report the result of p = .2026. There is a ~20% chance of getting this result by chance. The binomial test is two tailed, which means the "20% chance" is of getting 60 or better AND 40 or worse. My opinion is that the student was not guessing, but had retained some information. This is in part because I'm baseline inclined to think that students are trying their best, not randomly guessing. Additionally, in this case, the result is on the end of the "tails" of possible outcomes which is in accordance with this (student learned something end of the tails). 
+
+*Self Assessment: 100*
+
+**2. An examiner wants to make a TRUE/FALSE test, but is still deciding how many questions they will include. They want to make sure that it would be very difficult to simply randomly guess and be able to score any higher than 55% percent. How many questions would the examiner need to use to be confident that scores of 55% or higher were not produced by chance? (2 points)**
+
+I am a *statistical stickler* so I want it to be .05 or less likely (one tailed) for a student to get better than 55% on the test. I decide to do some guessing and checking: 
+```{r}
+binom.test(x = 55, n =  100, p = .5, alternative ="greater")
+```
+
+```{r}
+binom.test(x = 550, n =  1000, p = .5, alternative ="greater")
+```
+We got under .05 one tailed on our second guess, but this is overkill. So divide n and x by two:
+
+```{r}
+binom.test(x = 275, n =  500, p = .5, alternative ="greater")
+```
+Try dividing by two again:
+```{r}
+binom.test(x = 138, n =  250, p = .5, alternative ="greater")
+```
+Now we've over corrected. Let's try for 55% correct out of 300 (300*.55 = 165).
+```{r}
+binom.test(x = 165, n =  300, p = .5, alternative ="greater")
+```
+Now we're under. This is an acceptable p value for a *statistical stickler*, and we likely won't be able to get much fewer test questions, as many observations (test questions) are the consequence of being said *stickler*.
+
+*Self Assessment: 100*
+
+**3. A test has 5 TRUE/FALSE questions (each with one right answer) and 5 multiple choice questions with four choices each (each with only one right answer).**
+We simulate a single time taking this test.
+```{r}
+sum(rbinom(n= rep(1,10),
+  size = 1,
+  prob= c(.5,.5,.5,.5,.5,.25,.25,.25,.25,.25)))
+```
+Got a 30% grade by pure guessing alone.
+
+**- Create a sampling distribution or probability distribution to illustrate how a random chance process could perform on this test. (1 point)**
+We use our single time taking the test, and run it lots of times (monte-carlo style), loading scores into a variable in order to create a distribution of scores.
+
+```{r}
+s_distribution <- replicate(10000, sum(rbinom(n= rep(1,10),
+  size = 1,
+  prob= c(.5,.5,.5,.5,.5,.25,.25,.25,.25,.25))))
+
+hist(s_distribution)
+```
+*Self Assessment: 95*
+
+**- What is the probability that randomly guessing on each question could allow a person to receive 75% or greater on this test? (1 point)**
+We look for scores from our previous simulation that are 8 or over (impossible to score 7.5)
+```{R}
+sum(s_distribution > 7)
+```
+
+Since we know there were 10000 scores total, there is a 57/10000 (0.57%) chance of getting greater than 75 by chance.
+
+*Self Assessment: 90*
