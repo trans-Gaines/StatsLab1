@@ -1,0 +1,94 @@
+---
+title: "Lab 5"
+output: html_document
+---
+**1. Trust but verify. We trust that the rnorm() will generate random deviates in accordance with the definition of the normal distribution. For example, we learned in this lab, that a normal distribution with mean = 0, and sd =1 , should only produce values larger than 2.5 with a specific small probability, that is P(x>2.5) = 0.006209665. Verify this is approximately the case by randomly sampling 1 million numbers from this distribution, and calculate what proportion of numbers are larger than 2.5. (1 point)**
+
+##Sample 1e6 values from normal distribution
+```{r}
+verificationdata <- data.frame(observations = rnorm(n=1000000, mean = 0, sd = 1), Type = "A")
+library(ggplot2)
+ggplot(verificationdata, aes(x=observations)) +
+  geom_histogram(bins=100, color="black", 
+                 fill= 'green')
+```
+
+##Porportion (liklihood) of numbers larger than 2.5
+
+```{r}
+length(verificationdata$observations[verificationdata$observations > 2.5])/1000000
+```
+Just slightly more likely than chance, but close enough! Seems verified.
+
+*Self-Assessment: 100*
+
+**2. If performance on a standardized test was known to follow a normal distribution with mean 100 and standard deviation 10, and 10,000 people took the test, how many people would be expected to achieve a score higher than 3 standard deviations from the mean? (1 point)**
+##How many people did in one sample of 10,000?
+```{r}
+testingdata <- data.frame(test_scores = rnorm(n=10000, mean = 100, sd = 10))
+length(testingdata$test_scores[testingdata$test_scores > 130])
+```
+##How many people would be *expected to* from a probability perspective?
+```{r}
+library(dplyr)
+(pnorm(3, mean=0, sd = 1, lower.tail = FALSE))*10000
+```
+Approximately 13.5 people. Our singular trial was within an order of magnitude, acceptable to me. 
+
+*Self-Assessment: 100*
+
+**3. You randomly sample 25 numbers from a normal distribution with mean = 10 and standard deviation = 20. You obtain a sample mean of 12. You want to know the probability that you could have received a sample mean of 12 or larger. Create a sampling distribution of the mean for this scenario with at least 10,000 sample means (1 point).**
+
+```{r}
+ScenarioSamplingDistOfRawValues <- rnorm(10000*25, mean = 10, sd = 20)
+ScenarioObservations <- rep(1:10000, each = 25)
+ScenarioSamplingDistOfMean <- data.frame(ScenarioObservations, ScenarioSamplingDistOfRawValues)
+
+SampDistofMean <- ScenarioSamplingDistOfMean %>%
+  group_by(ScenarioObservations) %>%
+  summarize(SampleMeans = mean(ScenarioSamplingDistOfRawValues))
+SampDistofMean <- data.frame(SampDistofMean)
+```
+
+**Then, calculate the proportion of sample means that are 12 or larger (1 point).**
+
+```{r}
+sum(SampDistofMean$SampleMeans >= 12)/10000
+```
+
+*Self-Assessment: 100*
+
+**4. You randomly sample 100 numbers from a normal distribution with mean = 10 and standard deviation = 20. You obtain a sample mean of 12. You want to know the probability that you could have received a sample mean of 12 or larger. Create a sampling distribution of the mean for this scenario with at least 10,000 sample means. Then, calculate the proportion of sample means that are 12 or larger. Is the proportion different from question 3, why? (1 point).**
+
+
+```{r}
+ScenarioSamplingDistOfRawValues2 <- rnorm(10000*100, mean = 10, sd = 20)
+ScenarioObservations2 <- rep(1:10000, each = 100)
+ScenarioSamplingDistOfMean2 <- data.frame(ScenarioObservations2, ScenarioSamplingDistOfRawValues2)
+
+SampDistofMean2 <- ScenarioSamplingDistOfMean2 %>%
+  group_by(ScenarioObservations2) %>%
+  summarize(SampleMeans2 = mean(ScenarioSamplingDistOfRawValues2))
+SampDistofMean2 <- data.frame(SampDistofMean2)
+sum(SampDistofMean2$SampleMeans2 >= 12)/10000
+```
+
+Looks different! In this case, as the sample size increases (*4 in this case) we expect that the mean of each sample gets closer to the mean of the entire distribution. Thus, it follows that a smaller proportion will be 12 or greater (.1 SDs above mean or greater). In other words, the standard deviation of the sample mean (aka standard error) becomes smaller as the sample size increases. This is governed by an equation, standard error = σ/√n .
+
+*Self-Assessment: 100*
+
+**5. You randomly sample 25 numbers from a normal distribution with mean = 10 and standard deviation = 20. You obtain a sample standard deviation of 15. You want to know the probability that you could have received a sample standard deviation of 15 or less. Create a sampling distribution of standard deviations for this scenario with at least 10,000 sample standard deviations. Then, calculate the proportion of sample standard deviations that are 15 or less. (1 point)**
+
+```{r}
+ScenarioSamplingDistOfRawValues3 <- rnorm(10000*25, mean = 10, sd = 20)
+ScenarioObservations3 <- rep(1:10000, each = 25)
+ScenarioSamplingDistOfMean3 <- data.frame(ScenarioObservations3, ScenarioSamplingDistOfRawValues3)
+
+SampDistofMean3 <- ScenarioSamplingDistOfMean3 %>%
+  group_by(ScenarioObservations3) %>%
+  summarize(SampleMeans3 = mean(ScenarioSamplingDistOfRawValues3))
+SampDistofMean3 <- data.frame(SampDistofMean3)
+sum(SampDistofMean3$SampleMeans3 <= 15)/10000
+```
+
+*Self-Assessment: 100*

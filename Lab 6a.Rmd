@@ -1,0 +1,90 @@
+---
+title: "Lab 6"
+author: "Gaines"
+date: "11/14/2021"
+output: html_document
+---
+**1. Write a function that conducts a randomization test for the mean difference between two groups, and show that it works. Specifically, using your function, conduct a randomization test on the same data we used in the above example from lab. Report the results and briefly discuss what the results of the randomization tell you. (6 points).**
+
+*Inputs:
+the inputs should include:
+-vector for group 1
+-vector for group 2
+-the number of permutations/re-samplings of the data to create.
+
+Outputs:
+-output each group mean, and the difference between group means
+-output a histogram of the sampling distribution of the possible mean differences produced by the randomization process 
+-output the probability or odds of obtaining the observed mean difference or larger.
+
+Optional:
+-include the ability to calculate the probability of obtaining any mean difference or larger
+-deal with negative difference scores appropriately
+-add one or two-tailed test options*
+
+I'm going to recreate the various steps before writing a function.
+
+##Load in Data
+```{r}
+RandomTestData <- read.csv("Downloads/open_data/SchroederEpley2015data.csv", header = TRUE)
+RandomTestData
+
+#Detect Difference of Interest
+RandomTestData %>% 
+  group_by(CONDITION) %>%
+  summarize(group_means = mean(Intellect_Rating))
+```
+
+```{r}
+
+```
+
+```{r}
+#Set Up A Single Simulation Where Score Is Truly Random By Condition
+RandomizedRandomTestData <- RandomTestData %>%
+  select(CONDITION,Intellect_Rating)
+RandomizedRandomTestData %>%
+  mutate(Intellect_Rating = sample(Intellect_Rating))
+# permute the data monte carlo style, calculating many potential new mean differences
+montecarlo_potential_differences_in_rating <-c()
+for(i in 1:10000){
+  PermuttedRandomized_data <- RandomizedRandomTestData %>%
+    mutate(Intellect_Rating = sample(Intellect_Rating)) %>%
+    group_by(CONDITION) %>%
+    summarize(new_means = mean(Intellect_Rating), .groups='drop')
+  
+montecarlo_potential_differences_in_rating[i] <-  (PermuttedRandomized_data[ PermuttedRandomized_data$CONDITION == 1,]$new_means-PermuttedRandomized_data[ PermuttedRandomized_data$CONDITION == 0,]$new_means)
+}
+montecarlo_potential_differences_in_rating
+```
+
+##Likelihood of getting observed score? (1-tailed)
+
+```{r}
+length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating >= 2])/length(montecarlo_potential_differences_in_rating)
+```
+
+##Likelihood of getting observed score (2-tailed)
+
+```{r}
+(length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating >= 2])+length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating <= -2]))/length(montecarlo_potential_differences_in_rating)
+```
+
+##Lets solve this with what we have before we try to put together something with upstream inputs
+
+**1a. Extra: if the observed mean difference in the experiment was found to be .5, what would you have concluded from the randomization test?**
+
+```{r}
+print("One-Tailed:")
+length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating >= .5])/length(montecarlo_potential_differences_in_rating)
+print("Two-Tailed:")
+(length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating >= .5])+length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating <= -.5]))/length(montecarlo_potential_differences_in_rating)
+```
+
+Regardless of tails used, I would fail to reject the null hypothesis if the real-world observed difference was .5 (h0= difference between groups is due to chance alone).
+
+##Now to put it together and build a function
+```{R}
+
+
+```

@@ -1,0 +1,156 @@
+---
+title: "Lab 4"
+output: html_document
+---
+
+**1. Estimate the letter occurrence probabilities of all 26 letters in English by measuring a paragraph of English text from wikipedia. (hint use strsplit() to split a paragraph into individual letters) (1 point).**
+
+##Using Code Provided to Split Into Individual Letters A Paragraph Regarding The Roosevelt Island Tram
+```{r}
+
+
+my_paragraph <- "The Roosevelt Island Tramway contains two cabins that each run back and forth, suspended from their own pair of cables. Each cabin has a capacity of up to 125 people and makes approximately 115 trips per day. The tram moves at about 16 mph (26 km/h) and travels 3,100 feet (940 m) in 3 minutes. At its peak it climbs to 250 feet (76 m) above the East River as it follows its route on the north side of the Queensboro Bridge, providing views of the East Side of Midtown Manhattan. The tram runs every seven and half minutes from 6:00 a.m. to 2:00 a.m. (3:30 a.m. on weekends) and runs continuously during rush hours. The tramway's original operating components and cabins (prior to the 2010 renovation) are identical to the Skyride to access Grouse Mountain in Vancouver, Canada. The Roosevelt Island Tramway was the only aerial commuter tram in the US from 1976 until 2006, when the Portland Aerial Tram opened."
+the_letters <- unlist(strsplit(my_paragraph, split=""))
+the_letters
+```
+
+*Self-Assesment: 20, used provided code*
+
+**2. Generate “random” strings of letters that are sampled from a distribution where letter occurrence probability is the same as natural English. Use the probabilities for each letter from this wikipedia article, or use your own estimates from the previous question (2 points).**
+
+First we need to assign probabilities to each english letter using our Tram paragraph.
+
+##How Many of Each Letter?
+```{r}
+table(the_letters)
+```
+
+Looks like we have an issue were upper and lower case are separate entities. According to solution video we fix this by adding code to lowercase everything:
+
+```{r}
+lowered_letters <- tolower(the_letters)
+table(lowered_letters)
+```
+##Get rid of non-letter values
+```{r}
+letter_counts <- table(lowered_letters)
+letter_counts <- data.frame(letter_counts)
+library(dplyr)
+
+final_letter_counts <-letter_counts %>%
+  filter(lowered_letters %in% letters == TRUE)
+
+final_letter_counts
+```
+##transit Joke
+
+No j or Z!!! This tram does indeed not connect to Bushwick trains. '
+
+##Add probabilities
+```{r}
+totaltram <- sum(final_letter_counts$Freq)
+final_letter_counts <- final_letter_counts %>%
+  mutate(probability = Freq/totaltram)
+
+final_letter_counts
+```
+
+
+##Generate one 'word' sample
+```{r}
+naturaul_language_sample <- sample(x = final_letter_counts$lowered_letters, size = 5, replace = TRUE, prob = final_letter_counts$probability)
+naturaul_language_sample
+```
+
+##Use code from lab, with these probabilities, to generate random strings
+
+```{r}
+my_letters <- sample(final_letter_counts$lowered_letters,50*5,replace=TRUE, prob = final_letter_counts$probability)
+# turn the vector into a matrix with 5 columns
+my_strings <- matrix(my_letters, ncol=5)
+
+# each row is a word, need to collapse the column to create a string
+paste(my_strings[1,], collapse="")
+
+# loop to collapse all of the rows into words
+random_strings <-c()
+for(i in 1:dim(my_strings)[1]){
+  random_strings[i] <- paste(my_strings[i,], collapse="")
+}
+random_strings
+```
+We end up with tram paragraph weighted string.
+
+*Self Assesment: 80*
+
+**3. Generate a random walk of 10,000 steps. In a random walk, you are simulating the process of randomly taking a step up or down, as if you are on an infinite staircase. At each step you flip a coin. If you get heads you go up one step, if you get tails you go down one step. Start on step 0, then simulate a random walk for 10,000 steps. Your vector should preserve the step number for each step. For example, if the the first three steps were all heads, then the vector would begin with 0,1,2,3, which indicates a single step up each time. Plot the first 1,000 steps. (1 point)**
+
+```{r}
+##for loops where 10k cumulative decisions are made to go up or down
+stepvector <- c(0)
+for(i in 1:10000){
+  coin_flip <- sample(c(1,-1),1)
+  stepvector[i+1] <- stepvector[i]+coin_flip
+}
+##
+plot(stepvector)
+```
+
+*Self-Assessment: 30*
+
+**4. What was the most positive and most negative step reached out of 10,000? (1 point)**
+
+##Most Positive
+```{r}
+print(max(stepvector))
+```
+
+##Most Negative
+```{r}
+print(min(stepvector))
+```
+
+*Self Assessment: 100*
+
+**5.What was the longest run of steps where all steps were positive numbers. For example, in the sequence: 1,2,3,2,1,0,-1,-2,-1,-2,-1,0,1,2,3; the answer is 5 because the first five values were all positive, and this was the longest sequence of positive values. (1 point).**
+
+In order to approach this, my impulse is to make a data frame and mutate on a column that tells us if the value is positive/negative. From here we can figure out how to tally the longest unbroken string of 1. 
+
+##Assign Signs
+```{r}
+observationinstance <- c(1:10001)
+stepvectordataframe <- data.frame(observationinstance,stepvector)
+stepvectordataframe <- stepvectordataframe %>%
+  mutate(sign_of_Step = sign(stepvector))
+
+```
+
+However first we need to acknowledge that when the sign of step is 0, we have broken our chain of positives. So we need to go in and change all the zeros to negatives. 
+
+##Replace Zeros
+```{r}
+stepvectordataframe$sign_of_Step[stepvectordataframe$sign_of_Step == "0"] <- -1
+
+```
+
+Now we need to think about how to tally these 1s without just cumulatively summing the entire thing. In other words, we need a reset point. At this point I watched the solution video to see how Professor Crump worked this out. 
+
+```{r}
+logicalstep <- c(stepvectordataframe$sign_of_Step)
+
+sequencevector <- c()
+counter <- 1
+for(i in 1:length(logicalstep)){
+  if(logicalstep[i] == -1){
+    sequencevector <- c(sequencevector,counter)
+    counter <- 1
+  }else {
+    counter <- counter+logicalstep[i]
+  }
+}
+max(sequencevector)
+```
+So it looks like we had similar initial thoughts, but he did not use the dataframe. He accomplished the resetting by doing the "if(reset),else(add)" in the forloop. Additionally, we are treating zero's a bit differently, and as such his method would work to find negative numbers (treats zero as neutral starting point in either direction) while mine only works to find the positive string length, it would over-count negatives by incuding zeros due to my find and replace of zeros previously. 
+
+*Self-Assessment: 40*
+

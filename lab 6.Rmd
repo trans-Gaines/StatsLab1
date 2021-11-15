@@ -1,0 +1,219 @@
+---
+title: "Lab 6"
+author: "Gaines"
+date: "11/14/2021"
+output: html_document
+---
+**1. Write a function that conducts a randomization test for the mean difference between two groups, and show that it works. Specifically, using your function, conduct a randomization test on the same data we used in the above example from lab. Report the results and briefly discuss what the results of the randomization tell you. (6 points).**
+
+*Inputs:
+the inputs should include:
+-vector for group 1
+-vector for group 2
+-the number of permutations/re-samplings of the data to create
+
+
+Outputs:
+-output each group mean, and the difference between group means
+-output a histogram of the sampling distribution of the possible mean differences produced by the randomization process 
+-output the probability or odds of obtaining the observed mean difference or larger.
+
+Optional:
+-include the ability to calculate the probability of obtaining any mean difference or larger
+-deal with negative difference scores appropriately
+-add one or two-tailed test options*
+
+I'm going to recreate the various steps before writing a function.
+
+##Load in Data
+```{r}
+RandomTestData <- read.csv("Downloads/open_data/SchroederEpley2015data.csv", header = TRUE)
+RandomTestData
+library(dplyr)
+#Detect Difference of Interest
+Grouped_means <-data.frame(RandomTestData %>% 
+  group_by(CONDITION) %>%
+  summarize(group_means = mean(Intellect_Rating)))
+print("First Group Mean:")
+Grouped_means[1, "group_means"]
+print("Second Group Mean:")
+Grouped_means[2, "group_means"]
+print("Difference Between Group Means")
+(Grouped_means[1, "group_means"])-(Grouped_means[2, "group_means"])
+```
+
+
+```{r}
+#Set Up A Single Simulation Where Score Is Truly Random By Condition
+RandomizedRandomTestData <- RandomTestData %>%
+  select(CONDITION,Intellect_Rating)
+RandomizedRandomTestData %>%
+  mutate(Intellect_Rating = sample(Intellect_Rating))
+# permute the data monte carlo style, calculating many potential new mean differences
+montecarlo_potential_differences_in_rating <-c()
+for(i in 1:10000){
+  PermuttedRandomized_data <- RandomizedRandomTestData %>%
+    mutate(Intellect_Rating = sample(Intellect_Rating)) %>%
+    group_by(CONDITION) %>%
+    summarize(new_means = mean(Intellect_Rating), .groups='drop')
+  
+montecarlo_potential_differences_in_rating[i] <-  (PermuttedRandomized_data[ PermuttedRandomized_data$CONDITION == 1,]$new_means-PermuttedRandomized_data[ PermuttedRandomized_data$CONDITION == 0,]$new_means)
+}
+library(ggplot2)
+qplot(montecarlo_potential_differences_in_rating)+
+  geom_histogram(color="blue")
+
+```
+
+##Likelihood of getting observed score? (1-tailed)
+
+```{r}
+length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating >= 2])/length(montecarlo_potential_differences_in_rating)
+```
+
+##Likelihood of getting observed score (2-tailed)
+
+```{r}
+(length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating >= 2])+length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating <= -2]))/length(montecarlo_potential_differences_in_rating)
+```
+
+##Lets solve this with what we have before we try to put together something with upstream inputs
+
+**1a. Extra: if the observed mean difference in the experiment was found to be .5, what would you have concluded from the randomization test?**
+
+```{r}
+print("One-Tailed:")
+length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating >= .5])/length(montecarlo_potential_differences_in_rating)
+print("Two-Tailed:")
+(length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating >= .5])+length(montecarlo_potential_differences_in_rating[montecarlo_potential_differences_in_rating <= -.5]))/length(montecarlo_potential_differences_in_rating)
+```
+
+Regardless of tails used, I would fail to reject the null hypothesis if the real-world observed difference was .5 (h0= difference between groups is due to chance alone).
+
+##Now to put it together and build a function
+```{R}
+RandomizationTest <- function(Yourdata.frame, GroupingVariable, TestedVariable, PermutationNumber = 100) {
+##Output Means and Difference
+ Yourdata.frame %>% 
+  group_by("GroupingVariable") %>%
+ Grouped_means <-data.frame(Yourdata.frame %>% 
+  group_by("GroupingVariable") %>%
+  summarize(group_means = mean("TestedVariable")))
+print("First Group Mean:")
+Grouped_means[1, "group_means"]
+print("Second Group Mean:")
+Grouped_means[2, "group_means"]
+print("Difference Between Group Means")
+(Grouped_means[1, "group_means"])-(Grouped_means[2, "group_means"])
+#Set Up A Single Simulation Where Score Is Truly Random By Condition
+RandomizedRandomTestPemutation1 <- Yourdata.frame %>%
+  select("GroupingVariable","TestedVariable")
+RandomizedRandomTestPermutation1 %>%
+  mutate("TestedVariable" = sample("TestedVariable"))
+# permute the data monte carlo style, calculating many potential new mean differences
+montecarlo_potential_differences_by_group <-c()
+for(i in 1:PermutationNumber){
+  RandomizedRandomTestPermutationMany<- RandomizedRandomTestPermutation1 %>%
+    mutate("TestedVariable" = sample("TestedVariable")) %>%
+    group_by("GroupingVariable") %>%
+    summarize(new_means = mean("TestedVariable"), .groups='drop')
+  
+RandomizedRandomTestDifferences[i] <-  (RandomizedRandomTestPermutationMany[ RandomizedRandomTestPermutationMany$GroupingVariable == 1,]$new_means-RandomizedRandomTestPermutationMany[ RandomizedRandomTestPermutationMany$GroupingVariable == 0,]$new_means)
+##PlotPotentials
+library(ggplot2)
+qplot(RandomizedRandomTestDifferences)+
+  geom_histogram(color="blue")
+
+##Return Probabilities, Note use of 'Abs' in One-Tailed to Deal With Potential Negative
+
+print("One-Tailed:")
+length(RandomizedRandomTestDifferences[RandomizedRandomTestDifferences >= abs((Grouped_means[1, "group_means"])-(Grouped_means[2, "group_means"]))])/length(RandomizedRandomTestDifferences)
+
+print("Two-Tailed:")
+(length(RandomizedRandomTestDifferences[RandomizedRandomTestDifferences >= (Grouped_means[1, "group_means"])-(Grouped_means[2, "group_means"])])+length(RandomizedRandomTestDifferences[RandomizedRandomTestDifferences <= -(Grouped_means[1, "group_means"])-(Grouped_means[2, "group_means"])]))/length(RandomizedRandomTestDifferences)
+}
+
+}
+```
+
+##Now we try function with our original data
+```{r}
+##RandomizationTest(RandomTestData, CONDITION, Intellect_Rating, PermutationNumber = 100)
+```
+
+##NotHappening
+
+After some troubleshooting, I'm not sure I can get it with this method. Looking at stack overflow, something about the string column name needing special consideration. Looks like the groups as individual vectors and not columns in the dataframe is neccessary....
+
+
+```{r}
+Group_1 <- c(6,8,2,3,6,7,8,9,9,2)
+Group_2 <- c(5,7,8,2,8,2,6,3,2,1)
+library(dplyr)
+
+RandomizationTest <- function(A, B, PermutationNumber = 10000){
+##Output Means and Difference
+AMean <- mean(A)
+BMean <- mean(B)
+mean_Difference <- (AMean-BMean)
+
+##Set Up A Random, Undifferentiated Mix of Means
+all_means <- c(A,B)
+
+#Permute with for loops, monte carlo style
+
+RandomizedRandomTestPermutationMany <-c() 
+for(i in 1:PermutationNumber){
+  RandomizedRandomTestPermutation1<- sample(all_means)
+  new_A_mean <- mean(RandomizedRandomTestPermutation1[1:length(A)])
+  new_B_mean <- mean(RandomizedRandomTestPermutation1[(length(A)+1):length(all_means)])
+  RandomizedRandomTestPermutationMany[i] <-new_A_mean-new_B_mean
+}
+#Show Plots of Permutations
+the_plot <- ggplot2::qplot(RandomizedRandomTestPermutationMany)+ggplot2::geom_histogram(color="blue")+ggplot2::geom_vline(xintercept =mean_Difference, color = "purple")+ggplot2::theme_classic()
+
+#Make Probabilities- Not Use of Abs Function to Deal with Negatives and Provide Tail Options
+p_value1 <- length(RandomizedRandomTestPermutationMany[RandomizedRandomTestPermutationMany >= abs(mean_Difference)])/length(RandomizedRandomTestPermutationMany)
+
+p_value2 <- (length(RandomizedRandomTestPermutationMany[RandomizedRandomTestPermutationMany >= abs(mean_Difference)])+length(RandomizedRandomTestPermutationMany[RandomizedRandomTestPermutationMany <= (-1)*(abs(mean_Difference))]))/length(RandomizedRandomTestPermutationMany)
+
+#Output The Outputs We Wanted
+
+test_output <- list(A_Mean = mean(A),
+                     B_Mean = mean(B), 
+                     difference = mean_Difference,
+                    plot = the_plot,
+                    probability_one_tailed = p_value1,
+                    probability_two_tailed = p_value2)
+
+return(test_output)
+}
+
+RandomizationTest(A= Group_1, B= Group_2, PermutationNumber = 10000)
+```
+##Now that we have a working function with vectors we can utilize our real data
+```{r}
+##Isolate Test Variable of Groups
+library(dplyr)
+
+RealWorldData <- read.csv("Downloads/open_data/SchroederEpley2015data.csv", header = TRUE)
+group_Zero <-RealWorldData %>%
+  filter(CONDITION == 0) %>%
+  select(Intellect_Rating)
+group_One <-RealWorldData %>%
+  filter(CONDITION == 1) %>%
+  select(Intellect_Rating)
+
+##Change Data Frame To Vectors
+
+group_Zero <- group_Zero$Intellect_Rating
+group_One <- group_One$Intellect_Rating
+
+##Lets Go!
+RandomizationTest(A= group_Zero, B= group_One, PermutationNumber = 10000)
+```
+
+
+We would reject the null hypothesis, this difference in scores for the two groups is p <.01 likelihood per our two-tailed randomization test. We think that the recruiter intellect rating is significantly different when they get the verbal pitch versus written pitch. 
+
+*Self-Asessment: 70*
