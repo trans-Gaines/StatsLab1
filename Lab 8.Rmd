@@ -1,0 +1,118 @@
+---
+title: "Lab 8"
+output: html_document
+---
+
+
+**1.Write a function to convert a vector of raw-scores into z-scores. The function should have inputs for the vector, the mean and sd of the normal distribution, and should return a vector of zscores. (1 point). Also, demonstrate that the function works correctly (1 point). How you make the demonstration is up to you.**
+
+##We define our variables we want to use within our function (inputs)
+```{r}
+rawscores <- "raw score"
+mu <- "mean"
+sigma <- "std deviation of the normal distribution"
+```
+##We then use these in a function which returns a Z Score
+```{r}
+rawscores <- c(1,2,3,4,5,6)
+mu <- mean(rawscores)
+sigma <- sd(rawscores)
+
+rawto_zscores <- function(rawscores,mu,sigma){
+z_scorecalculated <-(rawscores-mu)/sigma
+return(z_scorecalculated)
+}
+rawto_zscores(rawscores,mu,sigma)
+```
+##demonstrate
+```{r}
+hist(rawto_zscores(rawscores,mu,sigma))
+```
+
+Looks right when compared to our vector entry (flat distribution of ascending values)
+
+*Self-Assessment: 100/100*
+
+**Advanced: Have an option so that the function will convert the raw scores to zscores in one of two ways: 1) using user provided mean and standard deviation 2) using the calculated mean and standard deviation from the raw scores**
+
+##What was the mean and SD?
+```{r}
+mu
+sigma
+```
+##Use "known" values instead to show advanced #1
+```{r}
+rawto_zscores(rawscores,3.5,1.870829)
+```
+##Now 'soup up' the raw-to-z so that you only have to specify vector for advanced #2
+```{r}
+rawscores <- c(1,2,3,4,5,6)
+mu <- mean(rawscores)
+sigma <- sd(rawscores)
+
+rawto_zscoresSouped <- function(rawscores){
+z_scorecalculated <-(rawscores-mean(rawscores))/sd(rawscores)
+return(z_scorecalculated)
+}
+rawto_zscoresSouped(rawscores)
+```
+
+*Self-Assessment: 100/100*
+
+**2. Base R does not have a function for a z-test. Write a function to accomplish a one-sample z-test. Remember, a one-sample z test is used to compare the probability of obtaining the sample mean (or larger or smaller) if it came from a known normal distribution. (2 points).**
+
+The one sample z test uses properties of a sample which we believe comes from a normally distributed population with a known mean and sd, then returns likelihood of finding this sample mean in a sample of this size by chance.
+
+##Getting a one sample z test
+```{r}
+"ztestcustom <- function(dataset,population_mean,populationSD){
+ zscorecustom<- (mean(dataset)-population_mean)/(populationSD/sqrt(length(dataset)))}"
+  
+```
+
+
+Base r does have several ways of accessing a normal distribution, and we can then reference on of these to get a p value for our z score
+
+##Probability of that z-score
+```{r}
+"pnorm(zscorecustom,0,1, lower.tail = FALSE)"
+```
+
+##Put them together with our previous rawscores and a fictitious population mean(2) and SD (2)
+
+```{r}
+ztestcustom <- function(dataset,population_mean, populationSD){
+ zscorecustom<- (mean(dataset)-population_mean)/(populationSD/sqrt(length(dataset)))
+ return(pnorm(zscorecustom,0,1, lower.tail = FALSE))}
+  ztestcustom(rawscores,2,2)
+```
+
+*Self-Assessment: 100*
+
+**2b. Use your z-test function to conduct a test of the following. A sample of 25 scores is taken. The mean of the sample is 50. The sample is assumed to have been taken from a normal distribution with mean 40 and standard deviation 7. Report a one-tailed z-test, examining the probability of obtaining a sample of greater than 50 in this situation. Report the results, and give a brief sentence explaining the result and the inference you make (2 points).**
+
+Ok this is slightly different than I assumed previously thinking we'd test this with a vector
+
+##Edit function for differing given values given
+```{r}
+ztestcustom2 <- function(samplemean,population_mean,sdsample, givensamplesize){
+ zscorecustom2<- (samplemean-population_mean)/(sdsample/sqrt(givensamplesize))
+ return(pnorm(zscorecustom2,0,1, lower.tail = FALSE))}
+  ztestcustom2(50,40,7,25)
+  
+```
+Very unlikely to sample 25 scores with a mean of 50 (<.01% of the time by chance) if they were truly sampled randomly from a population with a mean of 40 and an SD of 7. Now I want our function to return both the p value and the z score to be able to write a proper concluding statement.
+
+```{r}
+ztestcustom3 <- function(samplemean,population_mean,sdsample, givensamplesize){
+  outputofztestcustom3 <- list("z score equals", (samplemean-population_mean)/(sdsample/sqrt(givensamplesize)),"p value equals", (pnorm((samplemean-population_mean)/(sdsample/sqrt(givensamplesize)),0,1, lower.tail = FALSE)))
+  return(outputofztestcustom3) 
+}
+ztestcustom3(50,40,7,25)
+```
+
+
+Report and conclusion statement:
+The mean of the sample (M = 50) is significantly greater than the population with a mean of 40 and a standard deviation of 7, z= 7.14, p < 0.0001 one-tailed. We reject the null hypothesis that our sample is randomly drawn from the population. 
+
+*Self-Assessment: 100*
