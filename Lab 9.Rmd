@@ -1,0 +1,96 @@
+---
+title: "Lab 9"
+Author: "Gaines"
+Date: "11/10/2021"
+output: html_document
+---
+
+**1.The following paper links to open data, and describes a design where two chi-square tests are performed for Experiment 1 (A copy of this paper will be made available).**
+
+This is the paper citation:
+
+Silver, A. M., Stahl, A. E., Loiotile, R., Smith-Flores, A. S., & Feigenson, L. (2020). When Not Choosing Leads to Not Liking: Choice-Induced Preference in Infancy. Psychological Science, 0956797620954491.
+
+Obtain the data from the online repository, show your code for loading it into R, then conduct the same tests reported in Experiment 1 that the authors conducted. These include one binomial test, and two chi-square tests. Briefly report your re-analysis, and discuss whether you obtained the same values as the authors did (6 points).
+
+##Load in data
+```{r}
+library(readxl)
+library(dplyr)
+When_not_choosing_leads_to_not_liking_Data <- read_excel("Downloads/When not choosing leads to not liking_Data.xlsx")
+```
+
+*Self-Assessment: 100*
+
+##reproduce binomial test. How many infants chose a new block in second phase? 
+```{r}
+e1 <- When_not_choosing_leads_to_not_liking_Data %>% 
+  filter(ExperimentNumber == 1)
+
+number_chose_c <- sum(e1$'InfantChoseC')
+number_chose_c
+binom.test(x= number_chose_c, n=dim(e1)[1], p=.5, alternative = "two.sided")
+```
+
+They report:
+*"However, in the critical test trial that followed, 16 of 21 infants (76.2%) chose the new block (block C; Fig. 1)—a percentage significantly different from chance, according to a two-tailed binomial test, p = .026, 95% exact confidence interval (CI) = [52.83%, 91.78%], relative risk ratio = 1.52.*" (Silver et al page 1424)
+
+We arrived at essentially the same findings (76.2%, significant p value), however they rounded to p = .026, I would have rounded to p = .027
+
+*Self-Assessment: 100*
+
+```{R}
+library(tidyr)
+gender_choice_table <- e1 %>%
+  group_by(Gender, InfantChoseC) %>%
+  summarize(counts = n()) %>%
+  pivot_wider(names_from = c(Gender),
+              values_from = counts)
+gender_choice_table <- gender_choice_table[,2:3]
+(gender_Xsq <- chisq.test(gender_choice_table))
+uncorrected_Xsq <- sum(((gender_Xsq$observed-gender_Xsq$expected)^2)/gender_Xsq$expected)
+uncorrected_Xsq
+uncorrected_Xsqpvalue <- pchisq(uncorrected_Xsq,1,lower.tail = FALSE)
+uncorrected_Xsqpvalue
+```
+
+
+For this analysis, they report:
+*"χ2 (1, N = 21) = 0.15, p = .696, respectively."* (Silver et al page 1424)
+
+We matched that.
+
+Nota Bene: I went down a rabbit hole of NOT reproducing this analysis, identified the error to be at the level of the tible, which was a 1x3, then 1x2 after manipulation, as it didn't pull in the differentiation between a 0 and 1 in this column, just total entries. After several dead ends, solved this by identifying that previously column header had contained spaces (" Infant Chose C ") and I used " 'Infant Chose C' " to pull in this column, removed spaces in excel file, re-imported file so that I could use " InfantChoseC " and this proceeded to work as expected. 
+
+*Self-Assessment: 70*
+
+##reproduce non-legitimate chi square test
+```{r}
+age_table <- e1 %>%
+  group_by(AgeMonths, InfantChoseC) %>%
+  summarize(counts = n()) %>%
+  pivot_wider(names_from = c(AgeMonths),
+              values_from = counts)
+age_table[is.na(age_table)] <- 0
+age_table <- as.matrix(age_table[,2:21])
+(age_xs <- chisq.test(age_table))
+
+```
+They report:
+*"χ2(19,N = 21) = 18.24, p = .506"* (Silver et al page 1424)
+
+We matched that.
+*Self Assesment: 70*
+
+What I would do for age test instead would be Mann Whitney U if not normally distributed, T test for independent samples if normally distributed
+```{r}
+ t.test(e1$AgeMonths~e1$InfantChoseC)
+```
+
+In Summary:
+Had trouble getting professor Crump's embedded code chunk ('r XXX' )to work for total reproduction statement. 
+
+Reproduction Statement:
+However, in the critical test trial that followed, 16 of 21 infants (76.2%) chose the new block— a percentage significantly different from chance, according to a two-tailed binomial test, p = .027, 95% exact confidence interval (CI) = [52.83%, 91.78%], relative risk ratio not calculated.  A chi-square test of independence indicated no significant effect of age or gender on infants’ choices, $\chi^2$ (19, N = 21) = 18.24, p = .506, and $\chi^2$  (1, N = 21) = 0.15, p = .696, respectively. However, we determined that the $\chi^2$ test for age was less powerful than other options for determining statistical significance which accounted for the continuous, rather than categorical, nature of infants ages. The age of infants who did choose the new block was not significantly different than those who did not *t*(7.6) = 0.47023, p = 0.6513).
+
+*Self Assesment: 100*
