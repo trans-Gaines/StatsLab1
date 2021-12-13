@@ -1,0 +1,39 @@
+---
+title: "Lab 12"
+author: "Gaines"
+date: "12/6/2021"
+output: html_document
+---
+**1. Should you do a linear regression on this data? Explain.**
+
+```{r}
+Ylab12 <- c(10,9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9,10)
+Xlab12 <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19)
+
+plot(Xlab12,Ylab12)
+```
+
+Before answering the question, "should we," lets see if "Can we" and what happens. Looking at the plot, I would theorize that we'll see a flat regression line around y= 6. 
+
+```{r}
+plot(Xlab12,Ylab12)
+abline(lm(Ylab12~Xlab12))
+```
+```{r}
+lm(Ylab12 ~ Xlab12)
+```
+
+
+Flat regression line at 5.7. 
+
+Lets try cor.test
+
+```{r}
+cor.test(Xlab12, Ylab12)
+```
+
+Correlation value is tiny, p-value is >.99. According to this cor.test, no measurable correlation whatsoever. All noise, no signal. Whereas visually, we can see that there are two, equal and opposite signals (Slope 1, Slope 2) which are cancelling each other out with cor.test. Rather than an equation of a line, we could use an absolute value function or other rather simple way to describe two lines, and this would be high signal, low noise. 
+
+Simply put, we should not do a *linear* regression on this obviously non linear data, but we could do other forms of regression.
+
+*self-assessment: 100*
