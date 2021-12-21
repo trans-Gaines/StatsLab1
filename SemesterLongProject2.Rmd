@@ -1,0 +1,389 @@
+---
+title             : "Is Pre-Operative Imaging Neccesary for Upper Tract Urologic Reconstruction?"
+shorttitle        : "Pre-Operative Imaging for Upper Tract Reconstruction"
+
+author: 
+  - name          : "Kirtishri Mishra"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "222 e. 41st St New York, New York, 10017"
+    email         : "kirtishri.mishra@nyulangone.org"
+    role:
+      - Writing - Original Draft Preparation
+      - Conceptualization
+      - Writing - Review & Editing
+      
+  - name          : "Gaines Blasdel"
+    affiliation   : "1"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Original Draft Preparation
+      - Writing - Review & Editing
+      - Visualization
+      - Data Curation
+      - Formal Analysis
+      - Methodology
+      
+  - name          : "Eric Cho"
+    affiliation   : "2"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Review & Editing
+      
+  - name          : "Tanner Corse"
+    affiliation   : "3"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Review & Editing
+      
+  - name        : "Nathan Cheng"
+    affiliation   : "3"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Review & Editing
+      
+  - name        : "Janmejay Hingu"
+    affiliation   : "4"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Review & Editing
+
+  - name        : "Naveen Krishnan"
+    affiliation   : "2"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Review & Editing
+      
+  - name        : "Randall Lee"
+    affiliation   : "2"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Review & Editing
+
+  - name        : "Matt Lee"
+    affiliation   : "2"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Review & Editing 
+
+  - name        : "Michael Stifelman"
+    affiliation   : "3"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Review & Editing 
+      
+  - name        : "Daniel Eun"
+    affiliation   : "2"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Writing - Review & Editing 
+
+  - name        : "Lee C. Zhao"
+    affiliation   : "1"
+    corresponding : no    # Define only one corresponding author
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - Conceptualization
+      - Writing - Review & Editing 
+      - Supervision
+affiliation:
+  - id            : "1"
+    institution   : "New York University Grossman School of Medicine"
+  - id            : "2"
+    institution   : "Lewis Katz School of Medicine at Temple University"
+  - id            : "3"
+    institution   : "Hackensack Meridian School of Medicine at Seton Hall University"
+  - id            : "4"
+    institution   : "Rutgers New Jersey Medical School" 
+    
+authornote: |
+  From the Department of Urology, Lewis Katz School of Medicine at Temple University, Philadelphia, PA; the Department of Urology, New York University Grossman School of Medicine at New York University Langone Medical Center, New York, NY; the Department of Urology, Hackensack Meridian School of Medicine at Seton Hall University, Hackensack, NJ; and Rutgers New Jersey Medical School, Newark, NJ. 
+  
+  **Conflicts of Interest:** Kirtishri Mishra, Gaines Blasdel, Eric Cho, Tanner Corse, Nathan Cheng, Janmejay Hingu, Naveen Krishnan, Randall Lee, and Matt Lee report no conflicts of interest. Michael Stifelman is a lecturer for Intuitive Surgical, on the scientific advisory board for CONMED, consultant for VTI Medical, and has an educational agreement with Ethicon. Lee Zhao is a consultant for Intuitive. Daniel Eun is a speaker and consultant, and performs meeting activities and case observation for Intuitive Surgical; partial owner and shareholder for Melzi Corp; consultant for Johnson and Johnson; and receives support for trainees (no personal financials) from Hitachi Healthcare Americas.
+  
+  **Financial Disclosure:** This research did not receive funding from any source.
+
+abstract: |
+   This paper describes the reproduction of an abstract previously submitted to the American Urological Association 2022 Annual Conference. The abstract attempted to determine the utility of receiving medical imaging prior to ureteral reconstruction. The reproduced analysis sought to determine if those who received imaging had to wait longer to have their injury fixed in n=396 patients. We found a differing increase in wait time (1.5 months versus 2.5 months) but otherwise matched the initial analysis for the significance of the difference (p = .048). A Monte-Carlo simulation was used to determine that the analysis was underpowered to detect the .1 effect size observed. A second simulation determined that approximately double the number of patients, or 400 in each group, would provide 80% power. Though we observed a small and statistically significant relationship, further observations should be collected before drawing conclusions.
+   
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : ["StrictureLengthReferences.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+library("papaja")
+r_refs("r-references.bib")
+```
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+The ureter is tube that carries urine from the kidney to the bladder, and is 25-30 cm long in adults. It is small in diameter, and scarring secondary to injury or radiation therapy can rapidly cause the ureter to become blocked, creating a medical emergency once urine cannot exit the body. This condition can be stabilized using stents for weeks, months, or even years before reconstructive surgery is attempted, using a variety of techniques to create a patent ureter. The centers which participate in the Collaborative of Reconstructive Robotic Ureteral Surgery (CORRUS) use robotic surgical platforms, an advanced form of laproscopy controlled by the operating surgeon from a console, to perform these techniques. If a short stretch of ureter is effected (approximately 3cm or less) in an advantagous location, the patient would be able to undergo less intensive interventions, such as re-implantation where the scarred portion is removed and the healthy ureter section is reattached to the bladder or kidney. Longer injuries necessitate repurposing additional materials to make a new section of ureter, such as using the appendix (appendiceal onlay ureteroplasty) or tissue from the mouth (buccal muccosa ureteroplasty). These methods are recent developments which have rapidly become the standard of care, and have expanded the arsenal of surgeons to fix nearly any ureteral injury they discover. 
+
+The benefit of preoperative imaging prior to upper tract reconstruction is not well established, particularly in light of advances which allow surgeons to fix a wider variety of injuries. While many patients undergo imaging to characterize the extent and location of their ureteral injury, treatment decisions also depend on the quality of the healthy ureter and surrounding tissue, which imaging has limited ability to predict. We sought to determine the relationship between having prior imaging and wait times for reconstructive surgery.
+
+# Methods
+The Collaborative of Reconstructive Robotic Ureteral Surgery (CORRUS) Database was queried for all patients undergoing robotic ureteral reconstructive surgery between September of 2013 to September of 2021. Immediate outcomes were measured by any intraoperative complication and complications within 30 days greater than Clavien-Dindo Grade II as defined by @clavien2009clavien. Long term outcomes included any need for additional urological surgical procedures after index surgery, presence of hardware at most recent follow-up, and overall success definition. To meet this definition, patients had to meet all of the following criteria: no presence of flank pain from ureteral obstruction, no definitive demonstration of obstruction on imaging, no requirement for chronic stenting, and no repeat ureteral reconstruction. Those with missing data for intraoperative stricture, procedure type, or outcomes were excluded. 
+
+## Participants
+Participants were operated on by six surgeons at three academic medical centers. Data was collected in a prospective and ongoing manner. 
+
+## Material
+
+## Procedure
+Following requisite IRB approvals, study data were collected and managed using REDCap electronic data capture tools hosted at Temple University.
+
+## Data analysis
+We used `r cite_r("r-references.bib")` for all our analyses. All scripts can be found on GitHub (##URL).
+```{r Create Limited Data Set}
+#acquire data
+library(readr)
+CORRUSdataFORRADIOGRAPHANALYSIS <- read_csv("Desktop/Datasets/CORRUSdataFORRADIOGRAPHANALYSIS.csv")
+#put variables of interest in data frame
+library(dplyr)
+library(tidyr)
+NarrowDownToVariablesofInterest <- data.frame(CORRUSdataFORRADIOGRAPHANALYSIS$HadRadiographAssessed,CORRUSdataFORRADIOGRAPHANALYSIS$combinedSx, CORRUSdataFORRADIOGRAPHANALYSIS$pre_time,CORRUSdataFORRADIOGRAPHANALYSIS$pre_length)
+filtermethod <- c("yes", "no")
+ReproductionAnalysisSet <- filter(NarrowDownToVariablesofInterest, CORRUSdataFORRADIOGRAPHANALYSIS$HadRadiographAssessed %in% filtermethod) 
+colnames(ReproductionAnalysisSet) <- c("HadRadiographAssessed","combinedSx","pre_time","pre_length")
+write.csv(ReproductionAnalysisSet,"Desktop/Datasets/ReproductionAnalysisSet.csv", row.names = FALSE)
+##HadRadiographAssessed -> Among Those Who Had Intra-op Stricture Recorded, Did They Have Pre-Op Assessment?
+##combinedSx -> What Procedure Did They Undergo?
+##pre_time -> How long from Diagnosis to Surgery?
+##pre_length -> What was radiographic assessment in cm?
+##surg_length -> What was intra-operative assessment in cm?
+```
+
+**Analysis from Abstract**
+
+Chi-square test and post-hoc testing with bonferroni correction was used to determine if receipt of radiographic estimate differed for procedure type. Mann-Whitney U was used to analyze time from diagnosis to reconstructive surgery. Binary logistic regression was performed for each measurement in patients with both measurements to see which was more predictive of outcomes. 
+
+**Analysis Reproduction**
+```{r Test of Normality}
+##Demonstrate that data is not normally distributed, Mann-Whitney U is test to use
+NormalityCheck <- shapiro.test(ReproductionAnalysisSet$pre_time)
+```
+The Mann-Whitney U was was used to analyze time from diagnosis to reconstructive surgery, which was not normally distributed  as confirmed by Shapiro-Wilk Test (`r apa_print(NormalityCheck)$statistic`). Mann-Whitney U Test was utilized to analyze time from diagnosis to reconstructive surgery. A Monte-Carlo simulation was utilized to determine power of the present experiment, and an addition Monte-Carlo Simulation was employed to identify sample sizes to achieve 80% power.
+
+# Results
+
+**Results from Abstract**
+
+"*Of 396 patients with surgical estimates of stricture length, 217 (54.8%) had preoperative radiographic  assessment of stricture length. Buccal ureteroplasty patients were more likely (73%) to have prior imaging, while pyleoplasty patients were less likely (38%, p = <.0001). The average surgical observation  was 0.39cm (±1.23) larger than radiographic assessment,* ***and those with prior imaging waited 1.5 months longer for surgery (p=.048).*** *In those that have both prior and intra operative stricture length, the only significant predictor of outcomes studied was length on radiographic imaging for 30-day postoperative complications >Clavien-Dindo II, and this remained significant when controlling for procedure type (p = .034, B = 1.35)*"
+
+**Results of Reproduction**
+```{r Perform Test and Create Tables}
+##Perform test
+MannWhitneyUResult <- wilcox.test(pre_time~HadRadiographAssessed, var.equal=TRUE, data = ReproductionAnalysisSet) 
+#tables of means
+library(dplyr)
+ReproductionAnalysisSet$HadRadiographAssessed[ReproductionAnalysisSet$HadRadiographAssessed == "yes"] <- "Yes"
+ReproductionAnalysisSet$HadRadiographAssessed[ReproductionAnalysisSet$HadRadiographAssessed == "no"] <- "No"
+timetoSxbasedonimagingmean <- ReproductionAnalysisSet %>%
+            group_by("Had Radiographic Assessment" = HadRadiographAssessed) %>%
+            summarise("Mean Months to Surgery" = mean(pre_time, na.rm = TRUE),
+                      "Standard Deviation" = sd(pre_time, na.rm = TRUE))
+apa_table(timetoSxbasedonimagingmean)
+#table of medians and IQR more appropriate to non-normal data
+timetoSxbasedonimagingmedian <- ReproductionAnalysisSet %>%
+            group_by("Had Radiographic Assessment" = HadRadiographAssessed) %>%
+            summarise("Median Months to Surgery" = median(pre_time, na.rm = TRUE),
+                      "Interquartile Range" = IQR(pre_time, na.rm = TRUE))
+timetoSxbasedonimagingmedianPvalue <- cbind(timetoSxbasedonimagingmedian, 'p')
+colnames(timetoSxbasedonimagingmedianPvalue) <- c("Had Radiographic Assessmen","Median Months to Surgery","Interquartile Range","p")
+timetoSxbasedonimagingmedianPvalue[1,4] = ".048*"
+timetoSxbasedonimagingmedianPvalue[2,4] = " " 
+apa_table(timetoSxbasedonimagingmedianPvalue, note = "*Mann-Whitney U Test")
+```
+Of `r length(ReproductionAnalysisSet$HadRadiographAssessed)` patients with surgical estimates of stricture length, `r nrow(ReproductionAnalysisSet[ReproductionAnalysisSet$HadRadiographAssessed == "Yes", ])` (`r (nrow(ReproductionAnalysisSet[ReproductionAnalysisSet$HadRadiographAssessed == "Yes", ]))/(length(ReproductionAnalysisSet$HadRadiographAssessed))*100`%) had preoperative radiographic assessment of stricture length. *(Did not re-produce Chi-square with Bonferroni Correction)*. *(Did not reproduce descriptive difference in pre- and intra- operative measurement of stricture length)* Those with prior imaging waited an average of `r round((timetoSxbasedonimagingmean[2, 2]-timetoSxbasedonimagingmean[1, 2]), 1)` months longer for surgery as described in **Table 1** depicting means and **Table 2** depicting medians. Those who had received imaging waited significantly longer as demonstrated by the Mann Whitney U Test (`r apa_print(MannWhitneyUResult)$statistic`).
+
+```{r ViolinPlot, echo=FALSE, fig.cap="Time to Surgery in N = 396 Patients Requiring Ureteral Reconstruction", fig.align='left',fig.width=7, fig.height=8}
+library(ggplot2)
+#Apa theme via https://bookdown.org/content/43652694-3819-41d2-9e70-8cfc8dd25fd1/figures.html#saving-time modified to remove legend
+apatheme=theme_bw()+
+  theme(panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        panel.border=element_blank(),
+        axis.line=element_line(),
+        text=element_text(family='Times'),
+        legend.title=element_blank(),
+        legend.position = "none")
+        axis.text.y=element_text(size = 12)
+        axis.text.x=element_text(size = 12)
+# Basic violin plot
+Violinplot <- ggplot(ReproductionAnalysisSet, aes(x=pre_time, y=HadRadiographAssessed, na.rm=TRUE)) + 
+  geom_violin(fill="grey", trim = TRUE, bw= .38, na.rm=TRUE)+
+  labs(
+    x = "Time in Months From Diagnosis to Surgery"
+    , y = "Received Pre-Surgical Imaging"
+  ) +
+  coord_cartesian(xlim= c(0, 30))+
+  geom_boxplot(width=0.04, fatten = 4, na.rm = TRUE) +
+  stat_boxplot(geom ='errorbar', width = 0.027, size = .5,  na.rm=TRUE)+
+  apatheme
+Violinplot
+```
+These means are visualized with a combined box and violin plot in **Figure 1**, demonstrating shape of the distribution, quartiles, outliers (truncated to those <2.5 years from diagnosis to reconstruction), as well as the medians which were determined to be significantly different (`r apa_print(MannWhitneyUResult)$statistic`).
+
+```{r Monte Carlo Simulation for Power, echo=FALSE}
+#Create vectors from which to sample which contain our real population
+library(tidyr)
+PopulationNoAssessment <- data.frame(ReproductionAnalysisSet$HadRadiographAssessed,ReproductionAnalysisSet$pre_time)
+filter1 <- c("No")
+PopulationNoAssessment <- filter(PopulationNoAssessment, ReproductionAnalysisSet.HadRadiographAssessed %in% filter1,) 
+PopulationYesAssessment <- data.frame(ReproductionAnalysisSet$HadRadiographAssessed,ReproductionAnalysisSet$pre_time)
+filter2 <- c("Yes")
+PopulationYesAssessment <- filter(PopulationYesAssessment, ReproductionAnalysisSet.HadRadiographAssessed %in% filter2,) 
+#For loop to generate p values, resampling from our real population each time
+pvaluess <- rep(0, length(10000))
+for(i in 1:10000){
+  A <- sample(PopulationNoAssessment$ReproductionAnalysisSet.pre_time, 179, replace = TRUE)
+  B <- sample(PopulationYesAssessment$ReproductionAnalysisSet.pre_time, 217, replace = TRUE) 
+pvaluess[i] <- wilcox.test(A,B,alternative = "two.sided")$p.value
+}
+power <- length(pvaluess[pvaluess<.05])/length(pvaluess)
+#Backwards compatibility to other code I wrote
+power_analysis <- data.frame(1,power)
+```
+  
+A Monte-Carlo simulation determines what the percentage of 10000 trials of our experiment would be determined to be significant at the p<.05 level, also described as the power of the experiment. This random sampling from our real dataset rests on the assumption that each group is truly representative of populations which differ to a degree described by the effect size. We find that we were `r power_analysis$power` powered to find a significant difference in these two populations given these assumptions.
+
+We then perform a power curve analysis which again uses the assumption that each group is truly representative of differing populations. **Figure 2** demonstrates that a much larger sample of nearly 400 participants each is necessary to be 80% powered.
+
+```{r, echo=FALSE, fig.cap="Curve Analysis of the Mann-Whitney U Test's Power to Detect Observed Effect Size When Sampling from CORRUS Population", fig.align='left',fig.width=7, fig.height=8}
+#Create vectors from which to sample which contain our real population
+sim_power <- function(x){
+  A <- sample(PopulationNoAssessment$ReproductionAnalysisSet.pre_time, size=x, replace = TRUE)
+  B <- sample(PopulationYesAssessment$ReproductionAnalysisSet.pre_time, size=x, replace = TRUE) 
+  return(wilcox.test(A,B,alternative = "two.sided")$p.value)
+}
+# vector of sample sizes
+sample_sizes <- seq(100,750,10)
+# run simulation for each sample size 1000 times
+power <- sapply(sample_sizes, 
+          FUN = function(x) {
+            sims <- replicate(1000,sim_power(x))
+            sim_power <- length(sims[sims<.05])/length(sims)
+            return(sim_power)})
+# combine into dataframe
+plot_df <- data.frame(sample_sizes,power)
+# plot the power curve
+ggplot(plot_df, aes(x=sample_sizes,
+                    y=power))+
+  geom_point()+
+  geom_line()+
+  geom_hline(yintercept = .8, linetype = "solid", color = "red") +
+  geom_vline(xintercept = (396/2), linetype = "dashed", color = "blue") +
+  geom_hline(yintercept = mean(power_analysis$power), linetype = "dashed", color = "blue") +
+  annotate(geom = "text",
+             label = c(as.character("Acceptable Power of 80%")),
+             x = c(600),
+             y = c(.79),
+             angle = 0, 
+             vjust = 1,
+              color = "red") +
+  annotate(geom = "text",
+             label = c(as.character("Previous Monte Carlo Estimate of Power in Present Experiment")),
+             x = c(525),
+             y = c(mean(power_analysis$power)-.01),
+             angle = 0, 
+             vjust = 1,
+              color = "blue") +
+  annotate(geom = "text",
+             label = c(as.character("Sample Size in Present Experiment")),
+             x = c((396/2)+6),
+             y = c(.25),
+             angle = 90, 
+             vjust = 1,
+            color = "blue") +
+  coord_cartesian(xlim= c(100, 750), ylim= c(0,1))+
+  apatheme
+```
+
+Alternatively, if the assumption that the population is truly representative is false, it would follow that a differing effect size may in fact be at play. We provide a second power curve analysis in **Figure 3** which describes differing effect sizes in a simulation where our sample size is created from a normal population with the parameters of the CORRUS data. 
+```{R}
+library(rstatix)
+library(coin)
+effectsize <- wilcox_effsize(
+  data = ReproductionAnalysisSet,
+  pre_time~HadRadiographAssessed)
+```
+For this power curve, it is useful to know our observed effect size. We use Statix to determine an effect size of `r effectsize$effsize` (@R-rstatix).
+```{r, echo=FALSE, fig.cap="Power Curve Analysis of the Mann-Whitney U Test's Power to Detect Various Effect Size When Randomly Sampling From Normal Population Simulation of CORRUS Data", fig.align='left',fig.width=7, fig.height=8}
+#Create vectors from which to sample which contain normal approximations of our real population
+sim_power <- function(x){
+  A <- rnorm(217, mean=(mean(PopulationYesAssessment$ReproductionAnalysisSet.pre_time, na.rm = TRUE)+x), sd=(sd(PopulationYesAssessment$ReproductionAnalysisSet.pre_time, na.rm = TRUE)))
+  B <- rnorm(179, mean=(mean(PopulationNoAssessment$ReproductionAnalysisSet.pre_time, na.rm = TRUE)), sd=(sd(PopulationNoAssessment$ReproductionAnalysisSet.pre_time, na.rm = TRUE)))
+  return(wilcox.test(A,B,alternative = "two.sided")$p.value)
+}
+
+# vector of effect sizes
+effect_sizes <- seq(.05,2,.05)
+# run simulation for each effect size 1000 times
+power <- sapply(effect_sizes, 
+          FUN = function(x) {
+            sims <- replicate(1000,sim_power(x))
+            sim_power <- length(sims[sims<.05])/length(sims)
+            return(sim_power)})
+# combine into dataframe
+plot_df <- data.frame(effect_sizes,power)
+
+# plot the power curve
+ggplot(plot_df, aes(x=effect_sizes,
+                    y=power))+
+  geom_point()+
+  geom_line()+
+  geom_vline(xintercept = .1, linetype = "dashed", color = "blue") +
+  annotate(geom = "text",
+             label = c(as.character("Observed Effect Size in Present Experiment")),
+             x = c(.12),
+             y = c(.8),
+             angle = 90, 
+             vjust = 1,
+              color = "blue") +
+    annotate(geom = "text",
+             label = c(as.character("Previous Monte Carlo Estimate of Power in Present Experiment")),
+             x = c(1.2),
+             y = c(mean(power_analysis$power)-.005),
+             angle = 0, 
+             vjust = 1,
+              color = "blue") +
+    geom_hline(yintercept = mean(power_analysis$power), linetype = "dashed", color = "blue") +
+  coord_cartesian(ylim= c(0, 1))+
+  apatheme
+```
+
+# Discussion
+
+**Discussion of Reproduction**
+
+The import and cleaning process appears to have been successful, as the N of patients with  surgical estimates of stricture length, N of those with prior imaging, and Mann-Whitney U Test p-value are identical. There were different values for difference in mean wait time to surgery between what was reported in the initial abstract and what was found in the reproduction (1.5 Months vs. 2.5 Months). My suspicion is that when I wrote the abstract, this number was improperly calculated. My first hypothesis is that I previously used more cases than were intended to be included (ie, including those with pre-surgical imaging estimation and no surgical estimate, cases which should have been filtered out as they were in this analysis). A second hypothesis is that in a hurry to submit the abstract the day of the submission deadline, I 'eyeball' calculated the difference between 13.6 and 11.1 as 1.5, rather than 2.5. I believe this is what occurred, as when I go back to the archived SPSS dataset, I get the same mean values of 13.6 and 11.1. It is possible I arrived at differing means (Hypothesis 1) when I did the original analysis. If this is the case, I cannot reproduce this. 
+
+**Discussion of Power Curve**
+
+The Monte-Carlo power simulation describes that we were `r power_analysis$power` powered to find a significant result. This is reproduced by The **Figure 2** power curve indicates that for the .1 effect size we observed (ie, drawn from our real-world population we assume to be representative), there is an approximately equivalent power at our sample size. This indicates that a larger sample is needed to reach 80% power, and the analysis would benefit from collecting more data until there are approximately 400 of each group. This is possible, as it is an observational study with ongoing data collection. The second power curve analysis in **Figure 3**, using a simulation wherein normal distributions were created, is not an appropriate power curve analysis, as it is nowhere near to reproducing our Monte-Carlo estimate of power with the presently observed effect size. Too much data is lost when simulating as a normal distribution. 
+
+\newpage
+
+# References
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id="refs" custom-style="Bibliography"></div>
+\endgroup
